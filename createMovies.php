@@ -11,6 +11,7 @@
 
 include 'connection.php'; //Init a connection
 LoadFile "N:/xampp/php/libpq.dll";
+//bruh
 
 if($_POST){
  
