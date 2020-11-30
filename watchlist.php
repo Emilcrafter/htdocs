@@ -63,7 +63,6 @@ if($_POST){
     }
     else{
       echo "<h1> Search gave no result </h1>";
-      echo "<td>{$pid}</td>";
     }
 
 
