@@ -32,11 +32,62 @@
          
 <?php
 
- 
-include 'connection.php'; //Always include connection when handling the database
+include 'connection.php'; //Init a connection
 
-echo "WATCHLIST AND MOST LIKELY MORE PAGES WILL NEED TO BE ADDED, READ THE CASE STUDY!";
+if($_POST){
+    $query = "SELECT media.name, watchlist.twatched FROM watchlist NATURAL JOIN media WHERE pid = :pid";
+    $stmt = $con->prepare($query);
+
+    $pid=htmlspecialchars(strip_tags($_POST['pid'])); //Rename, add or remove columns as you like
+    $stmt->bindParam(':pid', $pid);
+
+    $stmt->execute();
+    $num = $stmt->rowCount(); //Aquire number of rows
+
+    if($num>0){ //Is there any data/rows?
+        echo "<table class='table table-responsive table-fix table-bordered'><thead class='thead-light'>";
+        echo "<tr>";
+            echo "<th>mID</th>"; // Rename, add or remove columns as you like.
+        echo "<th>Minutes Watched</th>";
+        echo "</tr>";
+    while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
+        extract($rad);
+        echo "<tr>";
+        
+        // Here is the data added to the table
+            echo "<td>{$name}</td>"; //Rename, add or remove columns as you like
+        echo "<td>{$twatched}</td>";
+        echo "</tr>";
+    }
+    echo "</table>";    
+    }
+    else{
+      echo "<h1> Search gave no result </h1>";
+      echo "<td>{$pid}</td>";
+    }
+
+
+}
 ?>
+ 
+<!-- The HTML-Form. Rename, add or remove columns for your insert here -->
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+    <table class='table table-hover table-responsive table-bordered'>
+        <tr>
+            <td>pid</td>
+            <td><input type='number' name='pid' class='form-control' /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type='submit' value='Save' class='btn btn-primary' />
+                <a href='movies.php' class='btn btn-danger'>Go back</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
 
 </body>
 </html>
