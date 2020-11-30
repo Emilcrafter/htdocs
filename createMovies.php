@@ -15,19 +15,19 @@ include 'connection.php'; //Init a connection
 if($_POST){
 
     try{
-        if (!empty($_POST['age_restriction'])) {
-            $age_restriction = "'".$pg->real_escape_string($_POST['age_restriction'])."'";
-        } else {
-            $age_restriction = "NULL";
+        if(empty($age_restriction) && empty($release_date)){
+            $query = "INSERT INTO media(mID,name,year,length) VALUES (:mID,:name,:relyear,:length)";
         }
-
-        if (!empty($_POST['release_date'])) {
-            $release_date = "'".$pg->real_escape_string($_POST['release_date'])."'";
-        } else {
-            $release_date = "NULL";
+        elseif(empty($age_restriction)){
+            $query = "INSERT INTO media(mID,name,year,length,releasedate) VALUES (:mID,:name,:relyear,:length,:releasedate)";
         }
-
-        $query = "INSERT INTO media(mID,name,year,length,age_restriction,release_date) VALUES (:mID,:name,:relyear,:length,$age_restriction,$release_date)";  // Put query inserting data to table here
+        elseif(empty($releasedate)){
+            $query = "INSERT INTO media(mID,name,year,length,age_restriction) VALUES (:mID,:name,:relyear,:length,:age_restriction)";
+        }
+        else{
+            $query = "INSERT INTO media(mID,name,year,length,age_restriction, releasedate) VALUES (:mID,:name,:relyear,:length,:age_restriction,:releasedate)";
+        }
+          // Put query inserting data to table here
 
         $stmt = $con->prepare($query); // prepare query for execution
  
@@ -42,15 +42,6 @@ if($_POST){
         $stmt->bindParam(':mID', $mID);
         $stmt->bindParam(':relyear', $relyear);
         $stmt->bindParam(':length', $length);
-        if (!empty($releasedate)){
-            $stmt->bindParam(':release_date', $releasedate);
-        }
-        else{
-            $stmt->bindParam(':release_date', pg_escape_string($releasedate));
-        }
-        
-		$stmt->bindParam(':age_restriction', $age_restriction);
-
 		
 		
 
