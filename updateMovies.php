@@ -19,7 +19,7 @@ $name=isset($_GET['name']) ? $_GET['name'] : die('ERROR: Record ID not found.');
 include 'connection.php'; //Init the connection
  
 try { //Aquire the already existing data
-    $query = "SELECT * FROM country WHERE name = :name"; //Put query gathering the data here
+    $query = "SELECT * FROM media WHERE mID = :name"; //Put query gathering the data here
     $stmt = $con->prepare( $query );
 
     $stmt->bindParam(':name', $name); //Binding ID for the query
@@ -28,11 +28,12 @@ try { //Aquire the already existing data
      
     $row = $stmt->fetch(PDO::FETCH_ASSOC); //Fetching the data
      
-    $code = $row['code']; //Rename, add or remove columns as you like
-	$capital = $row['capital'];
-	$province = $row['province'];
-	$area = $row['area'];
-	$population = $row['population'];
+    $mid = $row['mid']; //Rename, add or remove columns as you like
+	$name = $row['name'];
+	$year = $row['year'];
+	$length = $row['length'];
+	$age_restriction = $row['age_restriction'];
+    $release_date = $row['release_date'];
 }
  
 catch(PDOException $exception){ //In case of error
@@ -45,24 +46,44 @@ catch(PDOException $exception){ //In case of error
  if($_POST){ //Has the form been submitted?
       
      try{
-         $query = "UPDATE country 
-                     SET code=:code, capital=:capital, province=:province, area=:area, population=:population 
-                     WHERE name = :name"; //Put your query for updating data here
+        if(empty($age_restriction) && empty($release_date)){
+            $query = "UPDATE media 
+            SET name=:name, length=:length, year=:year 
+            WHERE mid = :name";
+        }
+        elseif(empty($age_restriction)){
+            $query = "UPDATE media 
+            SET name=:name, length=:length, year=:year, release_date=:release_date 
+            WHERE mid = :name";
+        }
+        elseif(empty($releasedate)){
+            $query = "UPDATE media 
+            SET name=:name, length=:length, year=:year, age_restriction=:age_restriction
+            WHERE mid = :name";
+        }
+        else{
+            $query = "UPDATE media 
+            SET name=:name, length=:length, year=:year, age_restriction=:age_restriction, release_date=:release_date 
+            WHERE mid = :name";
+        }
+         $query = "UPDATE media 
+                     SET name=:name, length=:length, year=:year, age_restriction=:age_restriction, release_date=:release_date 
+                     WHERE mid = :name"; //Put your query for updating data here
          $stmt = $con->prepare($query);
   
 
-         $code=htmlspecialchars(strip_tags($_POST['code'])); //Rename, add or remove columns as you like
-         $capital=htmlspecialchars(strip_tags($_POST['capital']));
-         $province=htmlspecialchars(strip_tags($_POST['province']));
-		 $area = htmlspecialchars(strip_tags($_POST['area']));
-		 $population = htmlspecialchars(strip_tags($_POST['population']));
+         $name=htmlspecialchars(strip_tags($_POST['name'])); //Rename, add or remove columns as you like
+         $year=htmlspecialchars(strip_tags($_POST['year']));
+         $length=htmlspecialchars(strip_tags($_POST['length']));
+		 $age_restriction = htmlspecialchars(strip_tags($_POST['age_restriction']));
+		 $release_date = htmlspecialchars(strip_tags($_POST['release_date']));
 		 
-        $stmt->bindParam(':name', $name); //Binding parameters for query
-        $stmt->bindParam(':code', $code);
-        $stmt->bindParam(':capital', $capital);
-		$stmt->bindParam(':province', $province);
-        $stmt->bindParam(':area', $area);
-        $stmt->bindParam(':population', $population);
+        $stmt->bindParam(':mid', $mid); //Binding parameters for query
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':year', $year);
+		$stmt->bindParam(':length', $length);
+        $stmt->bindParam(':age_restriction', $age_restriction);
+        $stmt->bindParam(':release_date', $release_date);
           
          // Execute the query
          if($stmt->execute()){//Executes and check if correctly executed
@@ -83,26 +104,26 @@ catch(PDOException $exception){ //In case of error
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?name={$name}");?>" method="post">
     <table class='table table-hover table-responsive table-bordered'>
         <tr>
-            <td>Code</td>
-            <td><input type='text' name='code' value="<?php echo htmlspecialchars($code, ENT_QUOTES);  ?>" class='form-control' /></td>
+            <td>Title</td>
+            <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
         <tr>
-            <td>Capital</td>
-            <td><input type='text' name='capital' value="<?php echo htmlspecialchars($capital, ENT_QUOTES);  ?>" class='form-control' /></td>
+            <td>Release Year</td>
+            <td><input type='text' name='year' value="<?php echo htmlspecialchars($year, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
         <tr>
-            <td>Province</td>
-            <td><input type='text' name='province' value="<?php echo htmlspecialchars($province, ENT_QUOTES);  ?>" class='form-control' /></td>
+            <td>Length</td>
+            <td><input type='text' name='length' value="<?php echo htmlspecialchars($length, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
 		
 		<tr>
-            <td>Area</td>
-            <td><input type='text' name='area' value="<?php echo htmlspecialchars($area, ENT_QUOTES);  ?>" class='form-control' /></td>
+            <td>Age restriction</td>
+            <td><input type='text' name='age_restriction' value="<?php echo htmlspecialchars($age_restriction, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
 		
 		<tr>
-            <td>Population</td>
-            <td><input type='text' name='population' value="<?php echo htmlspecialchars($population, ENT_QUOTES);  ?>" class='form-control' /></td>
+            <td>Release date</td>
+            <td><input type='text' name='release_date' value="<?php echo htmlspecialchars($release_date, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
 		
         <tr>
