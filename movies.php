@@ -45,7 +45,8 @@
 
 include 'connection.php'; //Init a connection
 
-$query = "SELECT * FROM media WHERE LOWER(name) LIKE LOWER(:keyword) or LOWER(mID) LIKE LOWER(:keyword) ORDER BY name"; // Put query fetching data from table here
+$query = "SELECT * FROM media WHERE LOWER(media.name) LIKE LOWER(:keyword)";
+
 
 $stmt = $con->prepare($query);
 $keyword= isset($_POST['keyword']) ? $_POST['keyword'] : ''; //Is there any data sent from the form?
@@ -54,6 +55,7 @@ $keyword = "%".$keyword."%";
 $stmt->bindParam(':keyword', $keyword);
 
 $stmt->execute();
+print_r($stmt->errorInfo());
 
 $num = $stmt->rowCount(); //Aquire number of rows
 
@@ -61,21 +63,20 @@ if($num>0){ //Is there any data/rows?
     echo "<table class='table table-responsive table-fix table-bordered'><thead class='thead-light'>";
     echo "<tr>";
         echo "<th>namn</th>"; // Rename, add or remove columns as you like.
-		echo "<th>code</th>";
+    echo "<th>mID</th>";
+    echo "<th>buttons</th>";
     echo "</tr>";
 while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
     extract($rad);
     echo "<tr>";
-		
+    //print_r(get_defined_vars());
 		// Here is the data added to the table
         echo "<td>{$name}</td>"; //Rename, add or remove columns as you like
-		echo "<td>{$code}</td>";
-		echo "<td>";
-		
+        echo "<td>{$mid}</td>";
 		//Here are the buttons for update, delete and read.
-		echo "<a href='readMovies.php?name={$name}'class='btn btn-info m-r-1em'>Read</a>"; // Replace with ID-variable, to make the buttons work
-		echo "<a href='updateMovies.php?name={$name}' class='btn btn-primary m-r-1em'>Update</a>";// Replace with ID-variable, to make the buttons work
-		echo "<a href='deleteMovies.php?name={$name}' class='btn btn-danger'>Delete</a>";// Replace with ID-variable, to make the buttons work
+		    echo "<td><a href='readMovies.php?name={$mid}'class='btn btn-info m-r-1em'>Read</a>"; // Replace with ID-variable, to make the buttons work
+		    echo "<a href='updateMovies.php?name={$mid}' class='btn btn-primary m-r-1em'>Update</a>";// Replace with ID-variable, to make the buttons work
+		    echo "<a href='deleteMovies.php?name={$mid}' class='btn btn-danger'>Delete</a></td>";// Replace with ID-variable, to make the buttons work
 		echo "</td>";
     echo "</tr>";
 }

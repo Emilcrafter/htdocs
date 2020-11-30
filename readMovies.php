@@ -20,7 +20,7 @@ $name=isset($_GET['name']) ? $_GET['name'] : die('ERROR: Record ID not found.');
 include 'connection.php';
  
 try {
-    $query = "SELECT * FROM media WHERE name = :name"; // Put query fetching data from table here
+    $query = "SELECT * FROM media WHERE mID = :name"; // Put query fetching data from table here
     $stmt = $con->prepare( $query );
  
     $stmt->bindParam(':name', $name); //Bind the ID for the query
@@ -30,8 +30,8 @@ try {
     $row = $stmt->fetch(PDO::FETCH_ASSOC); //Fetchs data
  
     $name = $row['name']; //Store data. Rename, add or remove columns as you like.
-    $mID = $row['mID'];
-	$relyear = $row['release_year'];
+    $mID = $row['mid'];
+	$relyear = $row['year'];
 	$length = $row['length'];
 	$age_restriction = $row['age_restriction'];
 	$releasedate = $row['release_date'];
