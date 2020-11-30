@@ -10,13 +10,24 @@
 <?php
 
 include 'connection.php'; //Init a connection
-LoadFile "N:/xampp/php/libpq.dll";
 //bruh
 
 if($_POST){
- 
+
     try{
-        $query = "INSERT INTO media(mID,name,year,length,age_restriction,release_date) VALUES (:mID,:name,:relyear,:length,null,null)";  // Put query inserting data to table here
+        if (!empty($_POST['age_restriction'])) {
+            $age_restriction = "'".$pg->real_escape_string($_POST['age_restriction'])."'";
+        } else {
+            $age_restriction = "NULL";
+        }
+
+        if (!empty($_POST['release_date'])) {
+            $release_date = "'".$pg->real_escape_string($_POST['release_date'])."'";
+        } else {
+            $release_date = "NULL";
+        }
+
+        $query = "INSERT INTO media(mID,name,year,length,age_restriction,release_date) VALUES (:mID,:name,:relyear,:length,$age_restriction,$release_date)";  // Put query inserting data to table here
 
         $stmt = $con->prepare($query); // prepare query for execution
  
