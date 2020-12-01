@@ -28,13 +28,14 @@
 </nav>
 </div>
 
+<!--Styling HTML ends and the real work begins below-->
 
 <?php
 
 include 'connection.php'; //Init a connection
 
 if($_POST){
-    $query = "SELECT media.name, watchlist.twatched FROM watchlist NATURAL JOIN media WHERE pid = :pid";
+    $query = "SELECT media.name, watchlist.twatched, rating.rate FROM watchlist NATURAL JOIN media NATURAL JOIN rating WHERE pid = :pid";
     $stmt = $con->prepare($query);
 
     $pid=htmlspecialchars(strip_tags($_POST['pid'])); //Rename, add or remove columns as you like
@@ -48,6 +49,7 @@ if($_POST){
         echo "<tr>";
             echo "<th>Movie name</th>"; // Rename, add or remove columns as you like.
         echo "<th>Minutes Watched</th>";
+        echo "<th>Rating</th>";
         echo "</tr>";
     while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
         extract($rad);
@@ -56,6 +58,7 @@ if($_POST){
         // Here is the data added to the table
             echo "<td>{$name}</td>"; //Rename, add or remove columns as you like
         echo "<td>{$twatched}</td>";
+        echo "<td>{$rate}</td>";
         echo "</tr>";
     }
     echo "</table>";    
