@@ -29,7 +29,6 @@
 </div>
 
 
-         
 <?php
 
 include 'connection.php'; //Init a connection
@@ -47,7 +46,7 @@ if($_POST){
     if($num>0){ //Is there any data/rows?
         echo "<table class='table table-responsive table-fix table-bordered'><thead class='thead-light'>";
         echo "<tr>";
-            echo "<th>mID</th>"; // Rename, add or remove columns as you like.
+            echo "<th>Movie name</th>"; // Rename, add or remove columns as you like.
         echo "<th>Minutes Watched</th>";
         echo "</tr>";
     while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data

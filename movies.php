@@ -55,7 +55,6 @@ $keyword = "%".$keyword."%";
 $stmt->bindParam(':keyword', $keyword);
 
 $stmt->execute();
-print_r($stmt->errorInfo());
 
 $num = $stmt->rowCount(); //Aquire number of rows
 
