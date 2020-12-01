@@ -77,7 +77,7 @@ if($_POST){
                 // Here is the data added to the table
                     echo "<td>{$pid}</td>"; //Rename, add or remove columns as you like
                 echo "<td>{$pname}</td>";
-                echo "<td><a href='readMovies.php?name={$cid}'class='btn btn-info m-r-1em'>LOG IN</a>"; 
+                echo "<td><a href='readUsers.php?name={$pid}'class='btn btn-info m-r-1em'>LOG IN</a>"; 
                 echo "</td>";
                 echo "</tr>";
             }
@@ -109,7 +109,7 @@ if($_POST){
             <td></td>
             <td>
                 <input type='submit' value='Log in' class='btn btn-primary' />
-                <a href='movies.php' class='btn btn-danger'>Go back</a>
+                <a href='Users.php' class='btn btn-danger'>Go back</a>
             </td>
         </tr>
     </table>
