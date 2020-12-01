@@ -33,7 +33,22 @@
     <table class='table table-hover table-responsive table-bordered'>
         <tr>
             <td>Search</td>
-            <td><input type='text' name='keyword' class='form-control' /></td>
+            <td><input type='text' name='keyword' class='form-control' />
+            <input type="submit">
+            </td>
+            <td>Name<input type='checkbox' name='namesearch' class='form-control' value = "LOWER(media.name)" checked/></td>
+            <td>Actors<input type='checkbox' name='actorsearch' class='form-control' value = "LOWER(actor.aname)"/></td>
+            <td>Year<input type='number' name='yearsearch' class='form-control' /></td>
+            <td>Country<input type='checkbox' name='countrysearch' class='form-control' value = "LOWER(nationality.nname)"/></td>
+            <td>Director<input type='checkbox' name='directorsearch' class='form-control' value = "LOWER(director.dname)"/></td>
+            <td>Genres<input type='checkbox' name='genresearch' class='form-control' value = "LOWER(mgenre.gname)"/></td>
+            <td>Length<input type='checkbox' name='lengthsearch' class='form-control' value = "Yes"/>
+            From<input type ='number' name='length_from' class='form-control' min=0>To
+            <input type ='number' name='length_to' class='form-control' min = 0></td>
+            <td><select name="search_type" id="search_type">
+            <option value="ANY">Any</option>
+            <option value="ALL">All</option>
+            </select></td>
         </tr>
     </table>
 </form>
@@ -45,13 +60,38 @@
 
 include 'connection.php'; //Init a connection
 
-$query = "SELECT * FROM media WHERE LOWER(media.name) LIKE LOWER(:keyword)";
+$query = "SELECT * FROM :tables WHERE LOWER(media.name) LIKE LOWER(:keyword)";
 
+$nsearch = 0;
+$sep = "OR";
+$namesearch = isset($_POST['namesearch']) ? $_POST['namesearch'] : '';
+$actorsearch = isset($_POST['actorsearch']) ? $_POST['actorsearch'] : '';
+$yearsearch = isset($_POST['yearsearch']) ? "CAST(".$_POST['yearsearch']." AS VARCHAR)" : '';
+$countrysearch = isset($_POST['countrysearch']) ? $_POST['countrysearch'] : '';
+$genresearch = isset($_POST['genresearch']) ? $_POST['genresearch'] : '';
+$lengthsearch = isset($_POST['lengthsearch']) ? $_POST['lengthsearch'] : '';
+$length_from = isset($_POST['length_from']) ? $_POST['length_from'] : '';
+$length_to = isset($_POST['length_to']) ? $_POST['length_to'] : '';
+$search_type = isset($_POST['search_type']) ? $_POST['search_type'] : '';
+if($search_type == "ANY"){
+  $sep = "OR";
+}
+else{
+  $sep = "AND";
+}
+$qarr = array($namesearch, $actorsearch, $yearsearch, $countrysearch, $genresearch);
+$qarr2 = [];
+foreach(array_slice($qarr, 1) as &$value){
+  array_push($qarr2, $sep." LOWER(".$value.") LIKE LOWER(:keyword)");
+}
+print_r($qarr2);
+$tables = "media NATURAL JOIN acting NATURAL JOIN actor NATURAL JOIN direction NATURAL JOIN director NATURAL JOIN nationality NATURAL JOIN mgenre";
 
 $stmt = $con->prepare($query);
 $keyword= isset($_POST['keyword']) ? $_POST['keyword'] : ''; //Is there any data sent from the form?
 
 $keyword = "%".$keyword."%";
+$stmt->bindParam(':tables', $tables);
 $stmt->bindParam(':keyword', $keyword);
 
 $stmt->execute();
