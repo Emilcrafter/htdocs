@@ -33,6 +33,7 @@
 
 include 'connection.php'; //Init a connection
 
+
 if($_POST){
     $query = "SELECT customer.cid, c_info.email, customer.password FROM c_info INNER JOIN customer ON c_info.cid = customer.cid WHERE c_info.email = :email_input";
     $stmt = $con->prepare($query);
@@ -66,7 +67,6 @@ if($_POST){
             if($num>0 && $correct_password == $password_input){ //Is there any data/rows?
                 echo "<table class='table table-responsive table-fix table-bordered'><thead class='thead-light'>";
                 echo "<tr>";
-                    echo "<th>Profile ID</th>"; // Rename, add or remove columns as you like.
                 echo "<th>Profile Name</th>";
                 echo "<th>Choose Profile</th>";
                 echo "</tr>";
@@ -75,9 +75,8 @@ if($_POST){
                 echo "<tr>";
                 
                 // Here is the data added to the table
-                    echo "<td>{$pid}</td>"; //Rename, add or remove columns as you like
                 echo "<td>{$pname}</td>";
-                echo "<td><a href='readUsers.php?name={$pid}'class='btn btn-info m-r-1em'>LOG IN</a>"; 
+                echo "<td><a href='readUsers.php?pid={$pid}'class='btn btn-info m-r-1em'>LOG IN</a>"; 
                 echo "</td>";
                 echo "</tr>";
             }
@@ -92,6 +91,7 @@ if($_POST){
     }
 
 }
+
 ?>
  
 <!-- The HTML-Form. Rename, add or remove columns for your insert here -->

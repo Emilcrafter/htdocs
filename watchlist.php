@@ -34,59 +34,16 @@
 
 include 'connection.php'; //Init a connection
 
-if($_POST){
-    $query = "SELECT media.name, watchlist.twatched, rating.rate FROM watchlist NATURAL JOIN media NATURAL JOIN rating WHERE pid = :pid";
-    $stmt = $con->prepare($query);
-
-    $pid=htmlspecialchars(strip_tags($_POST['pid'])); //Rename, add or remove columns as you like
-    $stmt->bindParam(':pid', $pid);
-
-    $stmt->execute();
-    $num = $stmt->rowCount(); //Aquire number of rows
-
-    if($num>0){ //Is there any data/rows?
-        echo "<table class='table table-responsive table-fix table-bordered'><thead class='thead-light'>";
-        echo "<tr>";
-            echo "<th>Movie name</th>"; // Rename, add or remove columns as you like.
-        echo "<th>Minutes Watched</th>";
-        echo "<th>Rating</th>";
-        echo "</tr>";
-    while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
-        extract($rad);
-        echo "<tr>";
-        
-        // Here is the data added to the table
-            echo "<td>{$name}</td>"; //Rename, add or remove columns as you like
-        echo "<td>{$twatched}</td>";
-        echo "<td>{$rate}</td>";
-        echo "</tr>";
-    }
-    echo "</table>";    
-    }
-    else{
-      echo "<h1> Search gave no result </h1>";
-    }
+    echo "<h1> You need to log in and choose a profile to see your watchlist. </h1>";
+    
+    echo "<tr>";
+        echo "<td><a href='Users.php'class='btn btn-info m-r-1em'>LOG IN HERE</a>"; 
+        echo "</td>";
+    echo "</tr>";
 
 
-}
 ?>
- 
-<!-- The HTML-Form. Rename, add or remove columns for your insert here -->
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
-    <table class='table table-hover table-responsive table-bordered'>
-        <tr>
-            <td>pid</td>
-            <td><input type='number' name='pid' class='form-control' /></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type='submit' value='Save' class='btn btn-primary' />
-                <a href='movies.php' class='btn btn-danger'>Go back</a>
-            </td>
-        </tr>
-    </table>
-</form>
+
 </body>
 </html>
 

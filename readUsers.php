@@ -15,11 +15,11 @@
          
 <?php
 
-$name=isset($_GET['name']) ? $_GET['name'] : die('ERROR: Record ID not found.'); //The parameter value from the click is aquired
+$pid=isset($_GET['pid']) ? $_GET['pid'] : die('ERROR: Record ID not found.'); //The parameter value from the click is aquired
  
 include 'connection.php';
 
-$cid = substr_replace($name ,"",-1);
+$cid = substr_replace($pid ,"",-1);
 
 try {
     $query = "SELECT customer.fname, customer.lname, c_info.dob, c_info.phone, c_info.email, c_info.address, customer.disc, subscription.stype, subscription.sdate, subscription.edate, subscription.payment FROM c_info NATURAL JOIN customer NATURAL JOIN subscription WHERE cid = :cid;"; // Put query fetching data from table here
@@ -64,7 +64,6 @@ catch(PDOException $exception){ //In case of error
         <td>Date of birth</td>
         <td><?php echo htmlspecialchars($dob, ENT_QUOTES);  ?></td>
     </tr>
-	
 	<tr>
         <td>Phone</td>
         <td><?php echo htmlspecialchars($phone, ENT_QUOTES);  ?></td>
@@ -95,17 +94,16 @@ catch(PDOException $exception){ //In case of error
         <td>Subscription Fee</td>
         <td><?php echo htmlspecialchars($payment, ENT_QUOTES);  ?></td>
     </tr>
-	
 
-	
-	
-	
-	
-    <tr>
-        <td></td>
-        <td>
-            <a href='Users.php' class='btn btn-danger'>Go back to Login</a>
-        </td>
+    <tr> 
+        <?php
+            echo "<tr>";
+                echo "<td><a href='readWatchlist.php?pid={$pid}'class='btn btn-info m-r-1em'>Watchlist</a>";
+                echo "</td>";
+                echo "<td><a href='Users.php' class='btn btn-danger'>Go back to Login</a>"; 
+                echo "</td>";
+            echo "</tr>";
+         ?>
     </tr>
 </table> 
     </div> 
