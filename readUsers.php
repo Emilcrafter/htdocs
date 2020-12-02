@@ -20,7 +20,6 @@ $name=isset($_GET['name']) ? $_GET['name'] : die('ERROR: Record ID not found.');
 include 'connection.php';
 
 $cid = substr_replace($name ,"",-1);
-echo "<td>{$cid}</td>";
 
 try {
     $query = "SELECT customer.fname, customer.lname, c_info.dob, c_info.phone, c_info.email, c_info.address, customer.disc, subscription.stype, subscription.sdate, subscription.edate, subscription.payment FROM c_info NATURAL JOIN customer NATURAL JOIN subscription WHERE cid = :cid;"; // Put query fetching data from table here
