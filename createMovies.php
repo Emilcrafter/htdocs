@@ -15,35 +15,33 @@ include 'connection.php'; //Init a connection
 if($_POST){
 
     try{
-        if(empty($age_restriction) && empty($release_date)){
-            $query = "INSERT INTO media(mID,name,year,length) VALUES (:mID,:name,:relyear,:length)";
-        }
-        elseif(empty($age_restriction)){
-            $query = "INSERT INTO media(mID,name,year,length,releasedate) VALUES (:mID,:name,:relyear,:length,:releasedate)";
-        }
-        elseif(empty($releasedate)){
-            $query = "INSERT INTO media(mID,name,year,length,age_restriction) VALUES (:mID,:name,:relyear,:length,:age_restriction)";
-        }
-        else{
-            $query = "INSERT INTO media(mID,name,year,length,age_restriction, releasedate) VALUES (:mID,:name,:relyear,:length,:age_restriction,:releasedate)";
-        }
+        
           // Put query inserting data to table here
 
-        $stmt = $con->prepare($query); // prepare query for execution
+        
  
         $mID=htmlspecialchars(strip_tags($_POST['mID']));
         $name=htmlspecialchars(strip_tags($_POST['name'])); //Rename, add or remove columns as you like
         $relyear=htmlspecialchars(strip_tags($_POST['relyear']));
         $length=htmlspecialchars(strip_tags($_POST['length']));
 		$age_restriction=htmlspecialchars(strip_tags($_POST['age_restriction']));
-		$releasedate=htmlspecialchars(strip_tags($_POST['release_date']));
- 
-        $stmt->bindParam(':name', $name); //Binding parameters for the query
-        $stmt->bindParam(':mID', $mID);
-        $stmt->bindParam(':relyear', $relyear);
-        $stmt->bindParam(':length', $length);
-		
-		
+        $releasedate=htmlspecialchars(strip_tags($_POST['release_date']));
+        
+        if(empty($age_restriction) && empty($release_date)){
+            $query = "INSERT INTO media(mID,name,year,length) VALUES ($mid,$name,$relyear,$length)";
+        }
+        elseif(empty($age_restriction)){
+            $query = "INSERT INTO media(mID,name,year,length,releasedate) VALUES ($mid,$name,$relyear,$length,$releasedate)";
+        }
+        elseif(empty($releasedate)){
+            $query = "INSERT INTO media(mID,name,year,length,age_restriction) VALUES ($mid,$name,$relyear,$length,$age_restriction)";
+        }
+        else{
+            $query = "INSERT INTO media(mID,name,year,length,age_restriction, releasedate) VALUES ($mid,$name,$relyear,$length,$age_restriction,$releasedate)";
+            print_r("hmmmm");
+        }
+        $stmt = $con->prepare($query); // prepare query for execution
+
 
         if($stmt->execute()){ //Executes and check if correctly executed
             echo "<div class='alert alert-success'>Record was saved.</div>";
