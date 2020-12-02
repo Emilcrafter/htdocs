@@ -39,6 +39,7 @@ try {
     $address = $row['address'];
     $disc = $row['disc'];
     $sdate = $row['sdate'];
+    $stype = $row['stype'];
     $edate = $row['edate'];
     $payment = $row['payment'];
 }
@@ -83,9 +84,14 @@ catch(PDOException $exception){ //In case of error
         <td><?php echo htmlspecialchars($disc, ENT_QUOTES);  ?></td>
     </tr>
     <tr>
+        <td>Subscription Type</td>
+        <td><?php echo htmlspecialchars($stype, ENT_QUOTES);  ?></td>
+    </tr>
+    <tr>
         <td>Subscription Start</td>
         <td><?php echo htmlspecialchars($sdate, ENT_QUOTES);  ?></td>
     </tr>
+
     <tr>
         <td>Subscription End</td>
         <td><?php echo htmlspecialchars($edate, ENT_QUOTES);  ?></td>
@@ -99,6 +105,8 @@ catch(PDOException $exception){ //In case of error
         <?php
             echo "<tr>";
                 echo "<td><a href='readWatchlist.php?pid={$pid}'class='btn btn-info m-r-1em'>Watchlist</a>";
+                echo "</td>";
+                echo "<td><a href='updateUsers.php?pid={$pid}'class='btn btn-info m-r-1em'>Edit user</a>";
                 echo "</td>";
                 echo "<td><a href='Users.php' class='btn btn-danger'>Go back to Login</a>"; 
                 echo "</td>";
