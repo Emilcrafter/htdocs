@@ -20,11 +20,9 @@ $name=isset($_GET['name']) ? $_GET['name'] : die('ERROR: Record ID not found.');
 include 'connection.php';
  
 try {
-    $query = "SELECT * FROM media WHERE mID = :name"; // Put query fetching data from table here
+    $query = "SELECT media.name, media.mid, media.age_restriction, media.release_date, director.dname, actor.aname FROM director NATURAL JOIN direction NATURAL JOIN media NATURAL JOIN actor NATURAL JOIN acting WHERE mid = :name;"; // Put query fetching data from table here
     $stmt = $con->prepare( $query );
- 
     $stmt->bindParam(':name', $name); //Bind the ID for the query
-
     $stmt->execute(); //Execute query
  
     $row = $stmt->fetch(PDO::FETCH_ASSOC); //Fetchs data
@@ -34,7 +32,11 @@ try {
 	$relyear = $row['year'];
 	$length = $row['length'];
 	$age_restriction = $row['age_restriction'];
-	$releasedate = $row['release_date'];
+    $releasedate = $row['release_date'];
+    $dname = $row['dname'];
+    $aname = $row['aname'];
+
+
 }
  
 
@@ -76,7 +78,7 @@ catch(PDOException $exception){ //In case of error
 	
 
 	
-	
+
 	
 	
     <tr>
