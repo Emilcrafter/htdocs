@@ -22,15 +22,16 @@ include 'connection.php';
 $cid = substr_replace($pid ,"",-1);
 
 try {
-    $query = "SELECT customer.fname, customer.lname, c_info.dob, c_info.phone, c_info.email, c_info.address, customer.disc, subscription.stype, subscription.sdate, subscription.edate, subscription.payment FROM c_info NATURAL JOIN customer NATURAL JOIN subscription WHERE cid = :cid;"; // Put query fetching data from table here
-    $stmt = $con->prepare( $query );
- 
-    $stmt->bindParam(':cid', $cid); //Bind the ID for the query
+    $query = "SELECT customer.fname, customer.lname, c_info.dob, c_info.phone, c_info.email, c_info.address, customer.disc, subscription.stype, subscription.sdate, subscription.edate, subscription.payment FROM c_info NATURAL JOIN customer NATURAL JOIN subscription WHERE cid = :cid"; // Put query fetching data from table here
+    $query2 = "SELECT pname, age_restriction FROM profile WHERE pid=:pid";
 
-    $stmt->execute(); //Execute query
- 
+
+    $stmt = $con->prepare($query);
+    $stmt->bindParam(':cid', $cid); //Bind the ID for the query
+    $stmt->execute(); //Execute query    
     $row = $stmt->fetch(PDO::FETCH_ASSOC); //Fetchs data
- 
+
+    print_r(gettype($row));
     $fname = $row['fname']; //Store data. Rename, add or remove columns as you like.
     $lname = $row['lname'];
 	$dob = $row['dob'];
@@ -42,6 +43,14 @@ try {
     $stype = $row['stype'];
     $edate = $row['edate'];
     $payment = $row['payment'];
+
+    $stmt2 = $con->prepare($query2);
+    $stmt2->bindParam(':pid', $pid);
+    $stmt2->execute();
+    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+    $pname = $row2['pname'];
+    $age_restriction = $row2['age_restriction'];
 }
  
 
@@ -100,7 +109,14 @@ catch(PDOException $exception){ //In case of error
         <td>Subscription Fee</td>
         <td><?php echo htmlspecialchars($payment, ENT_QUOTES);  ?></td>
     </tr>
-
+    <tr>
+        <td>Profile Name</td>
+        <td><?php echo htmlspecialchars($pname, ENT_QUOTES);  ?></td>
+    </tr>
+    <tr>
+        <td>Age restriction</td>
+        <td><?php echo htmlspecialchars($age_restriction, ENT_QUOTES);  ?></td>
+    </tr>
     <tr> 
         <?php
             echo "<tr>";

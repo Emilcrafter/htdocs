@@ -190,6 +190,14 @@ catch(PDOException $exception){ //In case of error
             <td><input type='text' name='payment' value="<?php echo htmlspecialchars($payment, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
         <tr>
+            <td>Profile name</td>
+            <td><input type='text' name='pname' value="<?php echo htmlspecialchars($pname, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
+            <td>Payment sum</td>
+            <td><input type='text' name='payment' value="<?php echo htmlspecialchars($payment, ENT_QUOTES);  ?>" class='form-control' /></td>
+        </tr>
+        <tr>
             <?php
             echo "<td></td>";
             echo "<td>";
