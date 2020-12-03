@@ -45,6 +45,9 @@
             <td>Length<input type='checkbox' name='lengthsearch' class='form-control' value = "CAST(media.length AS VARCHAR)"/>
             From<input type ='number' name='length_from' class='form-control' min=0>To
             <input type ='number' name='length_to' class='form-control' min = 0></td>
+            <td>Rating<input type='checkbox' name='ratingsearch' class='form-control' value = "CAST(ratings.avg AS VARCHAR)"/>
+            From<input type ='number' name='rating_from' class='form-control' min=0 max = 10>To
+            <input type ='number' name='rating_to' class='form-control' min = 0 max = 10></td>
             <td><select name="search_type" id="search_type" selected="ANY">
             <option value="ANY">Any</option>
             <option value="ALL">All</option>
@@ -70,8 +73,11 @@ $countrysearch = isset($_POST['countrysearch']) ? $_POST['countrysearch'] : '';
 $genresearch = isset($_POST['genresearch']) ? $_POST['genresearch'] : '';
 $lengthsearch = isset($_POST['lengthsearch']) ? $_POST['lengthsearch'] : '';
 $directorsearch = isset($_POST['directorsearch']) ? $_POST['directorsearch'] : '';
+$ratingsearch = isset($_POST['ratingsearch']) ? $_POST['ratingsearch'] : '';
 $length_from = isset($_POST['length_from']) ? $_POST['length_from'] : '';
 $length_to = isset($_POST['length_to']) ? $_POST['length_to'] : '';
+$rating_from = isset($_POST['rating_from']) ? $_POST['rating_from'] : '';
+$rating_to = isset($_POST['rating_to']) ? $_POST['rating_to'] : '';
 $search_type = isset($_POST['search_type']) ? $_POST['search_type'] : '';
 if($search_type == "ANY"){
   $sep = "OR";
@@ -89,7 +95,8 @@ if (isset($_POST['countrysearch'])) {array_push($tables, " NATURAL JOIN National
 if (isset($_POST['genresearch'])) {array_push($tables, " NATURAL JOIN mgenre");
 }
 if (isset($_POST['directorsearch'])) {array_push($tables, " NATURAL JOIN direction NATURAL JOIN director");
-  print_r("bruh");
+}
+if (isset($_POST['ratingsearch'])) {array_push($tables, " NATURAL JOIN ratings");
 }
 foreach($tables as &$table){
   $tablesstr = $tablesstr.$table;
@@ -113,10 +120,20 @@ if(isset($_POST['lengthsearch'])){
     array_push($qarr2, " AND length <= $length_to");
   }
 }
+if(isset($_POST['ratingsearch'])){
+  if(!empty($rating_from) && !empty($rating_to)){
+    array_push($qarr2, " AND avg >= $rating_from AND avg <= $rating_to");
+  }
+  elseif(!empty($rating_from)){
+    array_push($qarr2, " AND avg >= $rating_from");
+  }
+  elseif(!empty($rating_to)){
+    array_push($qarr2, " AND avg <= $rating_to");
+  }
+}
 foreach($qarr2 as &$string){
   $conds = $conds.$string;
 }
-print_r($conds);
 $query = "SELECT mID, name FROM (SELECT * FROM $tablesstr WHERE LOWER(media.name) LIKE LOWER(:keyword) $conds) a GROUP BY mID, name ORDER BY mID";
 $stmt = $con->prepare($query);
 $keyword= isset($_POST['keyword']) ? $_POST['keyword'] : ''; //Is there any data sent from the form?
@@ -144,7 +161,7 @@ while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
 		//Here are the buttons for update, delete and read.
 		    echo "<td><a href='readMovies.php?name={$mid}'class='btn btn-info m-r-1em'>Read</a>"; // Replace with ID-variable, to make the buttons work
 		    echo "<a href='updateMovies.php?name={$mid}' class='btn btn-primary m-r-1em'>Update</a>";// Replace with ID-variable, to make the buttons work
-		    echo "<a href='deleteMovies.php?name={$mid}' class='btn btn-danger'>Delete</a></td>";// Replace with ID-variable, to make the buttons work
+		    echo "<a href='deleteMovies.php?mid={$mid}' class='btn btn-danger'>Delete</a></td>";// Replace with ID-variable, to make the buttons work
 		echo "</td>";
     echo "</tr>";
 }

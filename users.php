@@ -99,7 +99,6 @@ if($_POST){
             else{
             echo "<h1> Your email or password is incorrect, please try again. </h1>";
             }
-            print_r($numberOfProfiles);
     }
     else{
         echo "<h1> Your email or password is incorrect, please try again. </h1>";
