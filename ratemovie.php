@@ -31,47 +31,57 @@
 <!--Styling HTML ends and the real work begins below-->
 
 <?php
-
-include 'connection.php'; //Init a connection
+ 
+ include 'connection.php'; //Init a connection
 
 $pid=isset($_GET['pid']) ? $_GET['pid'] : die('ERROR: Record ID not found.'); //The parameter value from the click is aquired
+$mid=isset($_GET['mid']) ? $_GET['mid'] : die('ERROR: Record ID not found.'); //The parameter value from the click is aquired
 
-    $query = "SELECT media.mid, media.name, watchlist.twatched, rating.rate FROM watchlist NATURAL JOIN media NATURAL JOIN rating WHERE pid = :pid";
-    $stmt = $con->prepare($query);
 
-    $stmt->bindParam(':pid', $pid);
+ if($_POST){ //Has the form been submitted?
+      
+    $newrate=htmlspecialchars(strip_tags($_POST['newrate'])); //Rename, add or remove columns as you like
 
-    $stmt->execute();
-    $num = $stmt->rowCount(); //Aquire number of rows
+    
+     try{
 
-?>
+
+        $query1 = "UPDATE rating
+        SET rate = :newrate 
+        WHERE  mid=$mid AND pid = $pid";
+
+         $stmt1 = $con->prepare($query1);
+         $stmt1 ->bindParam(':newrate', $newrate);
+
+
+         // Execute the query
+         $stmt1->execute();
+             echo "<div class='alert alert-success'>Record was updated.</div>";
+            
+     }
+     catch(PDOException $exception){ //In case of error
+         die('ERROR: ' . $exception->getMessage());
+     }
+ }
+
+ ?>
 
 
  
 <!-- The HTML-Form. Rename, add or remove columns for your insert here -->
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?pid={$pid}");?>" method="post">
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?pid={$pid}" . "&mid={$mid}");?>" method="post">
     <table class='table table-hover table-responsive table-bordered'>
     <?php 
 
+
         echo "<tr>";
-            echo "<th>Movie name</th>"; // Rename, add or remove columns as you like.
-        echo "<th>Procentage watched</th>";
-        echo "<th>Rating</th>";
-        echo "<th>Make new rating</th>";
-        echo "</tr>";
-    while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
-        extract($rad);
-        echo "<tr>";
-        
-        // Here is the data added to the table
-            echo "<td>{$name}</td>"; //Rename, add or remove columns as you like
-        echo "<td>{$twatched}</td>";
-        echo "<td>{$rate}</td>";
-        echo "<td><a href='ratemovie.php?pid={$pid}&mid={$mid}' class='btn btn-info m-r-1em'>Rate this movie</a><td>";
+        echo "<td>Rate the movie 1-10:</td>";
+        echo "<td><input type='number' name='newrate' class='form-control' /></td>";
         echo "</tr>"; 
-    }
+    
         echo "<tr>";
-                echo "<td><a href='users.php' class='btn btn-danger'>Go back to log in</a></td>";
+                echo "<td><a href='readWatchlist.php?pid={$pid}' class='btn btn-danger'>Go back watchlist</a></td>";
+                echo "<td><input type='submit' value='Save Changes' class='btn btn-primary' /><td>";
         echo "</tr>";
     ?>
 

@@ -26,6 +26,9 @@ try {
     $stmt->execute(); //Execute query
     $num = $stmt->rowCount();
 
+    
+
+
     $name1 = null;
     $mid1 = null;
     $year1 = null;
@@ -55,7 +58,35 @@ try {
             $dnametemp = $dname;
         }
     }
-    
+
+    $rating_sumquery ="SELECT SUM(rate) FROM rating WHERE mid = :mid";
+    $stmt = $con->prepare( $rating_sumquery );
+    $stmt->bindParam(':mid', $mid); //Bind the ID for the query
+    $stmt->execute(); //Execute query
+    $num = $stmt->rowCount(); 
+
+    $rad = $stmt->fetch(PDO::FETCH_ASSOC);
+    extract($rad);
+    $ratingsum = $sum;
+ 
+
+    $rating_numquery ="SELECT COUNT(*) AS num FROM rating WHERE mid = :mid GROUP BY mid";
+    $stmt = $con->prepare( $rating_numquery );
+    $stmt->bindParam(':mid', $mid); //Bind the ID for the query
+    $stmt->execute(); //Execute query
+    $num = $stmt->rowCount(); 
+
+    $rad = $stmt->fetch(PDO::FETCH_ASSOC);
+    extract($rad);
+    $ratingnum = $num;
+
+    if ($ratingnum != 0){
+        $ratingfinal = ceil($ratingsum / $ratingnum);
+    }
+    else{
+        $ratingfinal = 'No rating';
+    }
+
     $actor_query = "SELECT aname from actor NATURAL JOIN acting where mid =:mid"; // Put query fetching data from table here
     $stmt = $con->prepare( $actor_query );
     $stmt->bindParam(':mid', $mid); //Bind the ID for the query
@@ -83,6 +114,7 @@ try {
     echo "<th>Release date</th>";
     echo "<th>Directors</th>";
     echo "<th>Actors</th>";
+    echo "<th>Rating</th>";
     echo "</tr>";
 
     echo "<tr>";
@@ -96,6 +128,7 @@ try {
     echo "<td>{$release_date1}</td>";
     echo "<td>{$dname1}</td>";
     echo "<td>{$aname1}</td>";
+    echo "<td>{$ratingfinal}</td>";
     
     echo "</td>";
     echo "</tr>";
