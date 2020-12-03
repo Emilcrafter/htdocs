@@ -41,18 +41,16 @@
             $age_restriction = htmlspecialchars(strip_tags($_POST['age_restriction']));
             if(!empty($age_restriction)){
             $query = "INSERT INTO profile(pID, pname, profilenr, age_restriction) VALUES(:pid, :pname, :profilenr, :age_restriction)";
-            $stmt->bindParam(':pid', $pid);
+           
 }
             else{
                 $query = "INSERT INTO profile(pID, pname, profilenr) VALUES(:pid, :pname, :profilenr)";
             }
             $stmt = $con->prepare($query); // prepare query for execution
-            $stmt->bindParam(':pid', $pid);
-            print_r($pid);
             $stmt->bindParam(':pname', $pname);
             $stmt->bindParam(':age_restriction', $age_restriction);
             $stmt->bindParam(':profilenr', $profilenr);
-
+            $stmt->bindParam(':pid', $pid);
             $query2 = "INSERT INTO owns_profile(pID, cID) VALUES(:pid, :cid)";
             $stmt2 = $con->prepare($query2);
             $stmt2->bindParam(':pid', $pid);
