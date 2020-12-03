@@ -20,7 +20,7 @@ if($_POST){
 
         
  
-        $mID=htmlspecialchars(strip_tags($_POST['mID']));
+        $mid=htmlspecialchars(strip_tags($_POST['mID']));
         $name=htmlspecialchars(strip_tags($_POST['name'])); //Rename, add or remove columns as you like
         $relyear=htmlspecialchars(strip_tags($_POST['relyear']));
         $length=htmlspecialchars(strip_tags($_POST['length']));

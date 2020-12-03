@@ -46,7 +46,8 @@ $mid=isset($_GET['mid']) ? $_GET['mid'] : die('ERROR: Record ID not found.'); //
 
      try{
 
-        
+        if ($newrate < 11 && $newrate > 0){
+
         $query1 = "UPDATE rating
         SET rate = :newrate 
         WHERE  mid=$mid AND pid = $pid";
@@ -58,7 +59,7 @@ $mid=isset($_GET['mid']) ? $_GET['mid'] : die('ERROR: Record ID not found.'); //
          // Execute the query
          $stmt1->execute();
              echo "<div class='alert alert-success'>Record was updated.</div>";
-            
+        }
      }
      catch(PDOException $exception){ //In case of error
          die('ERROR: ' . $exception->getMessage());
