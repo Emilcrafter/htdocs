@@ -43,9 +43,10 @@ $mid=isset($_GET['mid']) ? $_GET['mid'] : die('ERROR: Record ID not found.'); //
     $newrate=htmlspecialchars(strip_tags($_POST['newrate'])); //Rename, add or remove columns as you like
 
     
+
      try{
 
-
+        
         $query1 = "UPDATE rating
         SET rate = :newrate 
         WHERE  mid=$mid AND pid = $pid";
