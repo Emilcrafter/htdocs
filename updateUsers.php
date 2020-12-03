@@ -34,7 +34,7 @@ try { //Aquire the already existing data
      $stmt->execute(); //Execute query
   
      $row = $stmt->fetch(PDO::FETCH_ASSOC); //Fetchs data
-  
+    
      $fname = $row['fname']; //Store data. Rename, add or remove columns as you like.
      $lname = $row['lname'];
      $dob = $row['dob'];
@@ -46,7 +46,14 @@ try { //Aquire the already existing data
      $sdate = $row['sdate'];
      $edate = $row['edate'];
      $payment = $row['payment'];
-     print_r($payment);
+
+     $pq = "SELECT pname, age_restriction FROM profile WHERE pid = :pid";
+     $ps = $con->prepare($pq);
+     $ps ->bindParam(':pid', $pid);
+     $ps->execute();
+     $pr = $ps->fetch(PDO::FETCH_ASSOC);
+     $pname = $pr['pname'];
+     $age_restriction = $pr['age_restriction'];
 }
  
 catch(PDOException $exception){ //In case of error
@@ -100,6 +107,10 @@ catch(PDOException $exception){ //In case of error
         SET stype=:stype, sdate=:sdate, edate=:edate, payment=:payment
         WHERE cid = $cid";
 
+        $query4 = "UPDATE profile
+        SET pname=:pname, age_restriction=:age_restriction
+        WHERE pid = $pid";  
+
          $stmt1 = $con->prepare($query1);
          $stmt1 ->bindParam(':fname', $fname);
          $stmt1 ->bindParam(':lname', $lname);
@@ -116,15 +127,16 @@ catch(PDOException $exception){ //In case of error
          $stmt3 ->bindParam(':stype', $stype);
          $stmt3 ->bindParam(':sdate', $sdate);
          $stmt3 ->bindParam(':edate', $edate);
-         $stmt3 ->bindParam(':payment', $payment);
+         $stmt3 ->bindParam(':payment', $payment); 
+
+        $stmt4 = $con->prepare($query4);
+        $stmt4 ->bindParam(':pname', $pname);
+        $stmt4 ->bindParam(':age_restriction', $age_restriction);
 
          // Execute the query
          if($stmt1->execute() && $stmt2->execute() && $stmt3->execute()){//Executes and check if correctly executed
              echo "<div class='alert alert-success'>Record was updated.</div>";
          }else{
-            print_r($stmt1->errorInfo()."1");
-            print_r($stmt2->errorInfo()."2");
-            print_r($stmt2->errorInfo()."3");
              echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
          }
           
@@ -193,6 +205,15 @@ catch(PDOException $exception){ //In case of error
             <td>Profile name</td>
             <td><input type='text' name='pname' value="<?php echo htmlspecialchars($pname, ENT_QUOTES);  ?>" class='form-control' /></td>
         </tr>
+        <tr>
+        <td>Age restriction</td>
+        <td><select name="age_restriction" id="age_restriction" selected=''>
+            <option value=''>None</option>
+            <option value='Youth'>Youth</option>
+            <option value='Child<'>Child</option>
+            </select>
+            <td>
+            </tr>
         <tr>
             <td>Payment sum</td>
             <td><input type='text' name='payment' value="<?php echo htmlspecialchars($payment, ENT_QUOTES);  ?>" class='form-control' /></td>

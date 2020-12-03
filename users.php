@@ -32,6 +32,13 @@
 <?php
 
 include 'connection.php'; //Init a connection
+if(isset($_GET['error'])){
+    $error = $_GET['error'];
+    if($error == 'userDelete'){
+        echo "<div class='alert alert-danger'>You may not delete all profiles from a user account. Please log in again.</div>";
+    }
+
+}
 
 
 if($_POST){
@@ -48,7 +55,7 @@ if($_POST){
         echo "<div class='alert alert-danger'>Your email or password is incorrect.</div>";
         print_r($stmt->errorInfo());
     }
-
+    $numberOfProfiles = 0;
     $num = $stmt->rowCount();
     if($num>0){
         $rad = $stmt->fetch(PDO::FETCH_ASSOC); //Fetches data
@@ -69,6 +76,7 @@ if($_POST){
                 echo "<tr>";
                 echo "<th>Profile Name</th>";
                 echo "<th>Choose Profile</th>";
+                echo "<th>Delete Profile</th>";
                 echo "</tr>";
             while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
                 extract($rad);
@@ -78,13 +86,20 @@ if($_POST){
                 echo "<td>{$pname}</td>";
                 echo "<td><a href='readUsers.php?pid={$pid}'class='btn btn-info m-r-1em'>LOG IN</a>"; 
                 echo "</td>";
+                echo "<td><a href='deleteUsers.php?pid={$pid}&n={$num}'class='btn btn-danger m-r-1em'>DELETE PROFILE</a>"; 
+                echo "</td>";
                 echo "</tr>";
+            }
+            if($num<3){
+                echo "<td><a href='createProfile.php?cid={$cid}'class='btn btn-info m-r-1em'>CREATE PROFILE</a>"; 
             }
             echo "</table>";    
             }
+
             else{
             echo "<h1> Your email or password is incorrect, please try again. </h1>";
             }
+            print_r($numberOfProfiles);
     }
     else{
         echo "<h1> Your email or password is incorrect, please try again. </h1>";

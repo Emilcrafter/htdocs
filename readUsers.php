@@ -31,7 +31,6 @@ try {
     $stmt->execute(); //Execute query    
     $row = $stmt->fetch(PDO::FETCH_ASSOC); //Fetchs data
 
-    print_r(gettype($row));
     $fname = $row['fname']; //Store data. Rename, add or remove columns as you like.
     $lname = $row['lname'];
 	$dob = $row['dob'];

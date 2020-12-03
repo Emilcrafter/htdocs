@@ -38,7 +38,6 @@ if($_POST){
         }
         else{
             $query = "INSERT INTO media(mID,name,year,length,age_restriction, releasedate) VALUES ($mid,$name,$relyear,$length,$age_restriction,$releasedate)";
-            print_r("hmmmm");
         }
         $stmt = $con->prepare($query); // prepare query for execution
 
