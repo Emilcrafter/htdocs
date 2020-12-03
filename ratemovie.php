@@ -80,7 +80,7 @@ $mid=isset($_GET['mid']) ? $_GET['mid'] : die('ERROR: Record ID not found.'); //
         echo "</tr>"; 
     
         echo "<tr>";
-                echo "<td><a href='users.php' class='btn btn-danger'>Go back to log in</a></td>";
+                echo "<td><a href='readWatchlist.php?pid={$pid}' class='btn btn-danger'>Go back watchlist</a></td>";
                 echo "<td><input type='submit' value='Save Changes' class='btn btn-primary' /><td>";
         echo "</tr>";
     ?>
