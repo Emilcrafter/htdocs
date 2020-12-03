@@ -54,7 +54,7 @@ $pid=isset($_GET['pid']) ? $_GET['pid'] : die('ERROR: Record ID not found.'); //
     $newrate=htmlspecialchars(strip_tags($_POST['newrate'])); //Rename, add or remove columns as you like
     $midform=htmlspecialchars(strip_tags($_POST['midform']));
 
-
+    echo "<td>{$newrate}</td>";
      try{
 
         $query1 = "UPDATE rating
@@ -86,7 +86,7 @@ $pid=isset($_GET['pid']) ? $_GET['pid'] : die('ERROR: Record ID not found.'); //
 
         echo "<tr>";
             echo "<th>Movie name</th>"; // Rename, add or remove columns as you like.
-        echo "<th>Minutes Watched</th>";
+        echo "<th>Procentage watched</th>";
         echo "<th>Rating</th>";
         echo "<th>Make new rating</th>";
         echo "</tr>";
@@ -99,21 +99,16 @@ $pid=isset($_GET['pid']) ? $_GET['pid'] : die('ERROR: Record ID not found.'); //
         echo "<td>{$twatched}</td>";
         echo "<td>{$rate}</td>";
         $echoye = htmlspecialchars($rate, ENT_QUOTES);
-        echo "<td><input type='text' name='newrate' midform=$mid value=$echoye class='form-control' /></td>";
+        echo "<td><input type='text' name='newrate' value=$echoye class='form-control' /></td>";
         echo "<td><input type='hidden' name='midform' value=$mid class='form-control' /></td>";
-        echo "</tr>";
+        echo "</tr>"; 
     }
+        echo "<tr>";
+                echo "<td><a href='users.php' class='btn btn-danger'>Go back to log in</a></td>";
+                echo "<td><input type='submit' value='Save Changes' class='btn btn-primary' /><td>";
+        echo "</tr>";
     ?>
-        <tr>
-            <td>
-                <a href='users.php' class='btn btn-danger'>Go back to log in</a>
-            </td>
-            <?php
-            echo "<td></td>";
-            echo "<td>";
-                echo "<input type='submit' value='Save Changes' class='btn btn-primary' />";
-            echo "</td>";
-            ?>
+
         </tr>
     </table>
 </form>

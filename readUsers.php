@@ -22,7 +22,7 @@ include 'connection.php';
 $cid = substr_replace($pid ,"",-1);
 
 try {
-    $query = "SELECT customer.fname, customer.lname, c_info.dob, c_info.phone, c_info.email, c_info.address, customer.disc, subscription.stype, subscription.sdate, subscription.edate, subscription.payment FROM c_info NATURAL JOIN customer NATURAL JOIN subscription WHERE cid = :cid"; // Put query fetching data from table here
+    $query = "SELECT customer.fname, customer.lname, c_info.dob, c_info.phone, c_info.email, c_info.address, customer.disc, subscription.stype, subscription.sdate, subscription.edate, subscription.payment, subscription.ccn FROM c_info NATURAL JOIN customer NATURAL JOIN subscription WHERE cid = :cid"; // Put query fetching data from table here
     $query2 = "SELECT pname, age_restriction FROM profile WHERE pid=:pid";
 
 
@@ -42,6 +42,7 @@ try {
     $stype = $row['stype'];
     $edate = $row['edate'];
     $payment = $row['payment'];
+    $ccn = $row['ccn'];
 
     $stmt2 = $con->prepare($query2);
     $stmt2->bindParam(':pid', $pid);
@@ -115,6 +116,10 @@ catch(PDOException $exception){ //In case of error
     <tr>
         <td>Age restriction</td>
         <td><?php echo htmlspecialchars($age_restriction, ENT_QUOTES);  ?></td>
+    </tr>
+    <tr>
+        <td>CCN</td>
+        <td><?php echo htmlspecialchars($ccn, ENT_QUOTES);  ?></td>
     </tr>
     <tr> 
         <?php
