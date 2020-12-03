@@ -161,7 +161,8 @@ while ($rad = $stmt->fetch(PDO::FETCH_ASSOC)){ //Fetches data
 		//Here are the buttons for update, delete and read.
 		    echo "<td><a href='readMovies.php?name={$mid}'class='btn btn-info m-r-1em'>Read</a>"; // Replace with ID-variable, to make the buttons work
 		    echo "<a href='updateMovies.php?name={$mid}' class='btn btn-primary m-r-1em'>Update</a>";// Replace with ID-variable, to make the buttons work
-		    echo "<a href='deleteMovies.php?mid={$mid}' class='btn btn-danger'>Delete</a></td>";// Replace with ID-variable, to make the buttons work
+        echo "<a href='deleteMovies.php?mid={$mid}' class='btn btn-danger'>Delete</a>";// Replace with ID-variable, to make the buttons work
+        echo "<a href='addtowatchlist.php?mid={$mid}' class='btn btn-danger'>Add to watchlist</a></td>";
 		echo "</td>";
     echo "</tr>";
 }

@@ -36,7 +36,7 @@ include 'connection.php'; //Init a connection
 
 $pid=isset($_GET['pid']) ? $_GET['pid'] : die('ERROR: Record ID not found.'); //The parameter value from the click is aquired
 
-    $query = "SELECT media.mid, media.name, watchlist.twatched, rating.rate FROM watchlist NATURAL JOIN media NATURAL JOIN rating WHERE pid = :pid";
+    $query = "SELECT media.mid, media.name, watchlist.twatched, rating.rate FROM media NATURAL JOIN watchlist LEFT JOIN rating ON watchlist.mid = rating.mid WHERE watchlist.pid = :pid";
     $stmt = $con->prepare($query);
 
     $stmt->bindParam(':pid', $pid);

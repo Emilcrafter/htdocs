@@ -28,18 +28,42 @@ if($_POST){
         $releasedate=htmlspecialchars(strip_tags($_POST['release_date']));
         
         if(empty($age_restriction) && empty($release_date)){
-            $query = "INSERT INTO media(mID,name,year,length) VALUES ($mid,$name,$relyear,$length)";
+            $query = "INSERT INTO media(mID,name,year,length) VALUES (:mid,:name,:relyear,:length)";
+            $stmt = $con->prepare($query); // prepare query for execution
+            $stmt->bindParam(':mid', $mid);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':relyear', $relyear);
+            $stmt->bindParam(':length', $length);
         }
         elseif(empty($age_restriction)){
-            $query = "INSERT INTO media(mID,name,year,length,releasedate) VALUES ($mid,$name,$relyear,$length,$releasedate)";
+            $query = "INSERT INTO media(mID,name,year,length,release_date) VALUES (:mid,:name,:relyear,:length,:releasedate)";
+            $stmt = $con->prepare($query); // prepare query for execution
+            $stmt->bindParam(':mid', $mid);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':relyear', $relyear);
+            $stmt->bindParam(':length', $length);
+            $stmt->bindParam(':releasedate', $releasedate);
         }
         elseif(empty($releasedate)){
-            $query = "INSERT INTO media(mID,name,year,length,age_restriction) VALUES ($mid,$name,$relyear,$length,$age_restriction)";
+            $query = "INSERT INTO media(mID,name,year,length,age_restriction) VALUES (:mid,:name,:relyear,:length,:age_restriction)";
+            $stmt = $con->prepare($query); // prepare query for execution
+            $stmt->bindParam(':mid', $mid);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':relyear', $relyear);
+            $stmt->bindParam(':length', $length);
+            $stmt->bindParam(':age_restriction', $age_restriction);
         }
         else{
-            $query = "INSERT INTO media(mID,name,year,length,age_restriction, releasedate) VALUES ($mid,$name,$relyear,$length,$age_restriction,$releasedate)";
+            $query = "INSERT INTO media(mID,name,year,length,age_restriction, release_date) VALUES (:mid,:name,:relyear,:length,:age_restriction,:releasedate)";
+            $stmt = $con->prepare($query); // prepare query for execution
+            $stmt->bindParam(':mid', $mid);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':relyear', $relyear);
+            $stmt->bindParam(':length', $length);
+            $stmt->bindParam(':releasedate', $releasedate);
+            $stmt->bindParam(':age_restriction', $age_restriction);
         }
-        $stmt = $con->prepare($query); // prepare query for execution
+        
 
 
         if($stmt->execute()){ //Executes and check if correctly executed
