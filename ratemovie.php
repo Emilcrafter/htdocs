@@ -60,6 +60,9 @@ $mid=isset($_GET['mid']) ? $_GET['mid'] : die('ERROR: Record ID not found.'); //
          $stmt1->execute();
              echo "<div class='alert alert-success'>Record was updated.</div>";
         }
+        else{
+            echo "<td>Rate the movie 1-10:</td>";
+        }
      }
      catch(PDOException $exception){ //In case of error
          die('ERROR: ' . $exception->getMessage());

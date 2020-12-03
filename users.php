@@ -125,6 +125,9 @@ if($_POST){
                 <input type='submit' value='Log in' class='btn btn-primary' />
                 <a href='Users.php' class='btn btn-danger'>Go back</a>
             </td>
+            <td>
+            <a href='showallUsers.php' class='btn btn-primary'>Show all Users</a>
+            </td>
         </tr>
     </table>
 </form>
